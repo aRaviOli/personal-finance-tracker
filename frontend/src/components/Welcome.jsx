@@ -56,8 +56,8 @@ function Welcome({ onLogin }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-white px-4">
-      <div className="bg-white p-8 rounded-xl shadow-xl w-full max-w-md border animate-fadeIn">
+    <div className="flex items-center justify-center bg-gradient-to-br from-indigo-100 to-white px-4">
+      <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-xl border animate-fadeSlideUp">
         {/* Logo + Title */}
         <div className="flex items-center justify-center mb-6 space-x-2">
           <span className="text-3xl">💸</span>
@@ -76,7 +76,7 @@ function Welcome({ onLogin }) {
           </button>
         </div>
 
-        {/* Animated Form */}
+        {/* Form */}
         <form
           className={`space-y-4 transition-opacity duration-300 ${
             animating ? "opacity-0 pointer-events-none" : "opacity-100"

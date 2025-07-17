@@ -2,19 +2,30 @@ import './App.css'
 import { useEffect, useState } from 'react';
 import Welcome from './components/Welcome';
 import Dashboard from './components/Dashboard';
+import Layout from "./components/Layout";
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("finance_user");
-    if (saved) setUser(saved);
+    const savedUser = localStorage.getItem("finance_user");
+    if (savedUser) setUser(savedUser);
   }, []);
 
-  return user ? (
-    <Dashboard user={user} onLogout={() => setUser(null)} />
-  ) : (
-    <Welcome onLogin={(name) => setUser(name)} />
+  const handleLogin = (username) => setUser(username);
+  const handleLogout = () => {
+    localStorage.removeItem("finance_user");
+    setUser(null);
+  };
+
+  return (
+    <Layout showHeader={!!user} onTitleClick={() => setUser(user)}>
+      {!user ? (
+        <Welcome onLogin={handleLogin} />
+      ) : (
+        <Dashboard user={user} onLogout={handleLogout} />
+      )}
+    </Layout>
   );
 }
 
