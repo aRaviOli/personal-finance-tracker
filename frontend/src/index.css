@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
 @keyframes scaleIn {
   0% {
     opacity: 0;
@@ -14,18 +30,6 @@
 
 .animate-scaleIn {
   animation: scaleIn 0.4s ease-out both;
-}
-
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @keyframes fadeSlideDown {
@@ -53,15 +57,11 @@
 }
 
 .animate-fadeSlideUp {
-  animation: fadeSlideUp 0.5s ease-out;
-}
-
-.animate-fadeSlideUp {
   animation: fadeSlideUp 0.6s ease-out both;
 }
 
 .animate-fadeSlideDown {
-  animation: fadeSlideDown 0.5s ease-out;
+  animation: fadeSlideDown 0.5s ease-out both;
 }
 
 html,
@@ -73,4 +73,52 @@ body,
   height: 100%;
   width: 100%;
   text-align: center;
+}
+
+@keyframes slideDownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpFade {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+.animate-slideDownFade {
+  animation: slideDownFade 1s ease-out forwards;
+}
+
+.animate-slideUpFade {
+  animation: slideUpFade 1s ease-in forwards;
+}
+
+@keyframes fadingSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadingSlideUp {
+  animation: fadingSlideUp 0.5s ease-out;
 }

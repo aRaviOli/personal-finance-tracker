@@ -1,16 +1,47 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import BalanceSummary from "../components/BalanceSummary";
+import TransactionForm from "../components/TransactionForm";
+import TransactionList from "../components/TransactionList";
+import TransactionSummary from "../components/TransactionSummary";
 
 function Dashboard({ user, onLogout }) {
-  const userData = JSON.parse(localStorage.getItem(`user_${user}`));
+  const userKey = `user_${user}`;
+  const userData = JSON.parse(localStorage.getItem(userKey));
   const name = userData?.name || user;
+
+  const [transactions, setTransactions] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const toggleForm = () => setShowForm(!showForm);
 
   useEffect(() => {
     document.title = `Dashboard | Fintrack`;
-  }, []);
+
+    // Initial load
+    const stored = JSON.parse(localStorage.getItem(userKey)) || {};
+    setTransactions(stored.transactions || []);
+  }, [userKey]);
+
+  const updateLocalStorage = (newTransactions) => {
+    const stored = JSON.parse(localStorage.getItem(userKey)) || {};
+    stored.transactions = newTransactions;
+    localStorage.setItem(userKey, JSON.stringify(stored));
+  };
+
+  const handleAddTransaction = (tx) => {
+    const updated = [tx, ...transactions];
+    setTransactions(updated);
+    updateLocalStorage(updated);
+  };
+
+  const handleDeleteTransaction = (indexToDelete) => {
+    const updated = transactions.filter((_, i) => i !== indexToDelete);
+    setTransactions(updated);
+    updateLocalStorage(updated);
+  };
 
   return (
     <div className="bg-gradient-to-br from-amber-100 via-indigo-100 to-pink-100 px-4 py-8 font-sans transition-colors duration-300">
-      <div className="max-w-5xl mx-auto flex justify-between items-center mb-10">
+      <section className="max-w-5xl mx-auto flex justify-between items-center mb-10">
         <div>
           <h1 className="text-4xl font-bold text-indigo-800 tracking-tight animate-fadeSlideDown">
             Welcome, {name} 👋
@@ -26,38 +57,37 @@ function Dashboard({ user, onLogout }) {
         >
           🔒 Logout
         </button>
-      </div>
+      </section>
 
-      {/* Summary Cards */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-indigo-500 transform transition-transform hover:scale-105 hover:shadow-xl">
-          <p className="text-sm text-gray-500 mb-1">Total Balance</p>
-          <h2 className="text-3xl font-semibold text-indigo-700">$0.00</h2>
-        </div>
-        <div className="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-green-500 transform transition-transform hover:rotate-1 hover:shadow-xl">
-          <p className="text-sm text-gray-500 mb-1">Income</p>
-          <h2 className="text-3xl font-semibold text-green-600">+$0.00</h2>
-        </div>
-        <div className="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-rose-500 transform transition-transform hover:-rotate-1 hover:shadow-xl">
-          <p className="text-sm text-gray-500 mb-1">Expenses</p>
-          <h2 className="text-3xl font-semibold text-rose-600">−$0.00</h2>
-        </div>
-      </div>
+      <section className="max-w-5xl mx-auto">
+        <BalanceSummary userKey={userKey} transactions={transactions} />
+      </section>
 
-      {/* Transaction Button */}
-      <div className="max-w-5xl mx-auto flex justify-end">
+      <section className="max-w-5xl mx-auto">
+        <TransactionSummary transactions={transactions} />
+      </section>
+
+      <section className="max-w-5xl mx-auto flex justify-end my-4">
         <button
+          onClick={toggleForm}
           className="bg-indigo-600 text-white px-6 py-2 rounded-full shadow-md font-semibold hover:bg-indigo-700 hover:scale-105 transition-all duration-200"
         >
-          ➕ Add Transaction
+          {showForm ? "✖️ Close Form" : "➕ Add Transaction"}
         </button>
-      </div>
+      </section>
+      
 
-      <div className="max-w-5xl mx-auto mt-10 text-center text-gray-500 text-sm animate-fadeSlideUp">
-        Your transactions will appear here once added.
-      </div>
+      {showForm && (
+        <section className="max-w-5xl mx-auto transition-all duration-300 animate-fadeSlideUp">
+          <TransactionForm onAddTransaction={handleAddTransaction} />
+        </section>
+      )}
+
+      <section className="max-w-5xl mx-auto mt-10 text-center text-gray-500 text-sm animate-fadeSlideUp">
+        <TransactionList transactions={transactions} onDelete={handleDeleteTransaction} />
+      </section>
     </div>
   );
 }
 
-export default Dashboard
+export default Dashboard;

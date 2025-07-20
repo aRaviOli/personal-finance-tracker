@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./Welcome.css"; // for animation styles
 
 function Welcome({ onLogin }) {
   const [mode, setMode] = useState("login"); // or "register"
@@ -123,4 +122,4 @@ function Welcome({ onLogin }) {
 }
 
 
-export default Welcome
+export default Welcome;
