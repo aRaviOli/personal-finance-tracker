@@ -3,8 +3,9 @@ import BalanceSummary from "../components/BalanceSummary";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
 import TransactionSummary from "../components/TransactionSummary";
+import { useNavigate } from "react-router-dom";
 
-function Dashboard({ user, onLogout }) {
+function Dashboard({ user, onLogout}) {
   const userKey = `user_${user}`;
   const userData = JSON.parse(localStorage.getItem(userKey));
   const name = userData?.name || user;
@@ -13,8 +14,10 @@ function Dashboard({ user, onLogout }) {
   const [showForm, setShowForm] = useState(false);
   const toggleForm = () => setShowForm(!showForm);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    document.title = `Dashboard | Fintrack`;
+    document.title = `Dashboard | RandomFintrack`;
 
     // Initial load
     const stored = JSON.parse(localStorage.getItem(userKey)) || {};
@@ -33,8 +36,8 @@ function Dashboard({ user, onLogout }) {
     updateLocalStorage(updated);
   };
 
-  const handleDeleteTransaction = (indexToDelete) => {
-    const updated = transactions.filter((_, i) => i !== indexToDelete);
+  const handleDeleteTransaction = (idToDelete) => {
+    const updated = transactions.filter((tx) => tx.id !== idToDelete);
     setTransactions(updated);
     updateLocalStorage(updated);
   };
@@ -65,6 +68,16 @@ function Dashboard({ user, onLogout }) {
 
       <section className="max-w-5xl mx-auto">
         <TransactionSummary transactions={transactions} />
+      </section>
+      
+      {/* Pie chart */}
+      <section className="max-w-5xl mx-auto flex justify-end mb-4">
+        <button
+          onClick={() => navigate("/charts")}
+          className="bg-pink-500 text-white px-5 py-2 rounded-full shadow hover:bg-pink-600 hover:scale-105 transition"
+        >
+          📊 View Expense Chart
+        </button>
       </section>
 
       <section className="max-w-5xl mx-auto flex justify-end my-4">

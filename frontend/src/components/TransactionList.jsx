@@ -1,43 +1,49 @@
-function TransactionList({ transactions, onDelete }) {
-  if (!transactions.length) {
-    return <div className="text-gray-500 text-sm mt-6">No transactions added yet.</div>;
-  }
+import { useEffect, useState } from "react";
+
+export default function TransactionList({ transactions, onDelete }) {
+  const [sortedTransactions, setSortedTransactions] = useState([]);
+
+  useEffect(() => {
+    const sorted = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+    setSortedTransactions(sorted);
+  }, [transactions]);
 
   return (
-    <div className="mt-8 max-w-5xl mx-auto bg-white shadow-md rounded-lg overflow-x-auto transition-all duration-300">
-      <table className="w-full table-auto text-sm">
-        <thead className="bg-indigo-100 text-indigo-800 font-semibold">
-          <tr>
-            <th className="px-4 py-2 text-left">Date</th>
-            <th className="px-4 py-2 text-left">Category</th>
-            <th className="px-4 py-2 text-right">Amount</th>
-            <th className="px-4 py-2 text-left">Description</th>
-            <th className="px-4 py-2 text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody className="text-slate-700">
-          {transactions.map((tx, index) => (
-            <tr key={tx.id} className="border-t animate-fadingSlideUp">
-              <td className="px-4 py-2">{tx.date}</td>
-              <td className="px-4 py-2">{tx.category}</td>
-              <td className="px-4 py-2 text-right">{Number(tx.amount).toFixed(2)}</td>
-              <td className="px-4 py-2">{tx.description || "-"}</td>
-              <td className="px-4 py-2 text-center">
-                <button
-                  onClick={() => onDelete(index)}
-                  className="text-red-500 hover:text-red-700 hover:scale-110 transition-all duration-150"
-                  title="Delete"
-                >
-                  🗑
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="transaction-list space-y-4">
+      {sortedTransactions.length === 0 ? (
+        <p>No transactions added yet.</p>
+      ) : (
+        sortedTransactions.map((tx) => (
+          <div
+            key={tx.id}
+            className={`p-4 rounded-lg shadow transition-all animate-fadeSlideUp flex justify-between items-center ${
+              parseFloat(tx.amount) >= 0 ? "bg-green-50" : "bg-red-50"
+            }`}
+          >
+            <div>
+              <div className="font-medium">{tx.category}</div>
+              <div className="text-xs text-gray-500">{tx.date}</div>
+              {tx.description && <div className="text-sm text-gray-600">{tx.description}</div>}
+            </div>
+            <div className="flex items-center gap-4">
+              <div
+                className={`text-lg font-semibold ${
+                  parseFloat(tx.amount) >= 0 ? "text-green-700" : "text-red-700"
+                }`}
+              >
+                {parseFloat(tx.amount) >= 0 ? "+" : "-"}${Math.abs(tx.amount).toFixed(2)}
+              </div>
+              <button
+                onClick={() => onDelete(tx.id)}
+                className="text-gray-400 hover:text-red-500 transition"
+                title="Delete transaction"
+              >
+                🗑️
+              </button>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 }
-
-
-export default TransactionList;

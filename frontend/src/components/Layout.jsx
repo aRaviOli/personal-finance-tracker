@@ -1,4 +1,7 @@
-function Layout({ children, onTitleClick, showHeader = true }) {
+import { useNavigate } from "react-router-dom";
+
+function Layout({ children, showHeader = true }) {
+  const navigate = useNavigate();
   return (
     <div className="relative bg-gradient-to-br from-fuchsia-100 via-yellow-100 to-sky-100 font-sans overflow-x-hidden">
       <div className="flex flex-col min-h-screen">
@@ -14,12 +17,12 @@ function Layout({ children, onTitleClick, showHeader = true }) {
         {showHeader && (
           <header className="px-4 py-6">
             <div
-              onClick={onTitleClick}
+              onClick={() => navigate("/")}
               className="max-w-6xl mx-auto flex items-center cursor-pointer group"
             >
               <span className="text-3xl mr-2">💸</span>
               <h1 className="text-2xl font-extrabold text-indigo-700 group-hover:text-indigo-900 transition">
-                Fintrack
+                RandomFintrack
               </h1>
             </div>
           </header>

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
 function Welcome({ onLogin }) {
-  const [mode, setMode] = useState("login"); // or "register"
+  const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ name: "", username: "", password: "" });
   const [error, setError] = useState("");
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    document.title = (mode === "login" ? "Login" : "Register") + " | Fintrack";
+    document.title = (mode === "login" ? "Login" : "Register") + " | RandomFintrack";
   }, [mode]);
 
   const handleToggle = () => {
@@ -60,7 +60,7 @@ function Welcome({ onLogin }) {
         {/* Logo + Title */}
         <div className="flex items-center justify-center mb-6 space-x-2">
           <span className="text-3xl">💸</span>
-          <h1 className="text-2xl font-bold text-indigo-700">Fintrack</h1>
+          <h1 className="text-2xl font-bold text-indigo-700">RandomFintrack</h1>
         </div>
 
         {/* Toggle Mode Button */}
