@@ -3,7 +3,6 @@ import BalanceSummary from "../components/BalanceSummary";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
 import TransactionSummary from "../components/TransactionSummary";
-import { useNavigate } from "react-router-dom";
 
 function Dashboard({ user, onLogout}) {
   const userKey = `user_${user}`;
@@ -14,12 +13,9 @@ function Dashboard({ user, onLogout}) {
   const [showForm, setShowForm] = useState(false);
   const toggleForm = () => setShowForm(!showForm);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     document.title = `Dashboard | RandomFintrack`;
 
-    // Initial load
     const stored = JSON.parse(localStorage.getItem(userKey)) || {};
     setTransactions(stored.transactions || []);
   }, [userKey]);
@@ -43,10 +39,10 @@ function Dashboard({ user, onLogout}) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-amber-100 via-indigo-100 to-pink-100 px-4 py-8 font-sans transition-colors duration-300">
+    <div className="bg-gradient-to-br from-amber-100 via-indigo-100 to-pink-100 px-4 py-8 font-sans transition-colors rounded-xl duration-300">
       <section className="max-w-5xl mx-auto flex justify-between items-center mb-10">
         <div>
-          <h1 className="text-4xl font-bold text-indigo-800 tracking-tight animate-fadeSlideDown">
+          <h1 className="text-4xl font-bold text-orange-400 tracking-tight animate-fadeSlideDown">
             Welcome, {name} 👋
           </h1>
           <p className="text-gray-600 text-sm mt-1">Track your finances with style.</p>
@@ -69,16 +65,6 @@ function Dashboard({ user, onLogout}) {
       <section className="max-w-5xl mx-auto">
         <TransactionSummary transactions={transactions} />
       </section>
-      
-      {/* Pie chart */}
-      <section className="max-w-5xl mx-auto flex justify-end mb-4">
-        <button
-          onClick={() => navigate("/charts")}
-          className="bg-pink-500 text-white px-5 py-2 rounded-full shadow hover:bg-pink-600 hover:scale-105 transition"
-        >
-          📊 View Expense Chart
-        </button>
-      </section>
 
       <section className="max-w-5xl mx-auto flex justify-end my-4">
         <button
@@ -89,7 +75,6 @@ function Dashboard({ user, onLogout}) {
         </button>
       </section>
       
-
       {showForm && (
         <section className="max-w-5xl mx-auto transition-all duration-300 animate-fadeSlideUp">
           <TransactionForm onAddTransaction={handleAddTransaction} />

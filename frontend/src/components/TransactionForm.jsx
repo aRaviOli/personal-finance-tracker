@@ -2,7 +2,6 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 function TransactionForm({ onAddTransaction }) {
-  
   const [formData, setFormData] = useState({
     date: "",
     category: "",
@@ -17,10 +16,15 @@ function TransactionForm({ onAddTransaction }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const parsedAmount = parseFloat(formData.amount);
+    if (!parsedAmount || parsedAmount === 0) {
+      return alert("Amount must be a non-zero number.");
+    }
+
     const newTransaction = {
       id: uuidv4(),
       ...formData,
-      amount: parseFloat(formData.amount),
+      amount: parsedAmount,
       date: formData.date || new Date().toISOString().split("T")[0],
     };
 
